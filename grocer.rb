@@ -27,37 +27,41 @@ end
 def apply_coupons(cart, coupons)
   
   new_cart = {}
-  coupons.each do |coup|
-    cart.each do |food, specs|
-      blob = "#{food} W/COUPON"
-      unless new_cart.keys.include?(blob)
+  if coupons != []
+    coupons.each do |coup|
+      cart.each do |food, specs|
+        blob = "#{food} W/COUPON"
+        unless new_cart.keys.include?(blob)
+          if coup[:item] == food
+            new_cart[blob] = {price:0.0 , clearance:0.0 , count: 0.0}
+          end
+        end
         if coup[:item] == food
-          new_cart[blob] = {price:0.0 , clearance:0.0 , count: 0.0}
-        end
-      end
-      if coup[:item] == food
-        if cart[food][:count] == coup[:num]
-          new_cart[blob][:price] = coup[:cost]
-          new_cart[blob][:count] += 1.0
-          new_cart[blob][:clearance] = cart[food][:clearance]
-          cart[food][:count] = cart[food][:count] - coup[:num]
+          if cart[food][:count] == coup[:num]
+            new_cart[blob][:price] = coup[:cost]
+            new_cart[blob][:count] += 1.0
+            new_cart[blob][:clearance] = cart[food][:clearance]
+            cart[food][:count] = cart[food][:count] - coup[:num]
+            new_cart[food] = cart[food]
+          elsif cart[food][:count] > coup[:num]
+            new_cart[blob][:price] = coup[:cost]
+            new_cart[blob][:count] += 1.0
+            new_cart[blob][:clearance] = cart[food][:clearance]
+            cart[food][:count] = cart[food][:count] - coup[:num]
+            new_cart[food] = cart[food]
+          else
+            binding.pry
+            new_cart[food] = cart[food]
+          end
+        else 
           new_cart[food] = cart[food]
-        elsif cart[food][:count] > coup[:num]
-          new_cart[blob][:price] = coup[:cost]
-          new_cart[blob][:count] += 1.0
-          new_cart[blob][:clearance] = cart[food][:clearance]
-          cart[food][:count] = cart[food][:count] - coup[:num]
-          new_cart[food] = cart[food]
-        else
-          binding.pry
-          new_cart[food] = cart[food]
-        end
-      else 
-        new_cart[food] = cart[food]
+        end 
       end 
-    end 
+    end
+    new_cart
+  else 
+    cart
   end
-  new_cart
 end
 
 def apply_clearance 
