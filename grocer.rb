@@ -50,7 +50,6 @@ def apply_coupons(cart, coupons)
             cart[food][:count] = cart[food][:count] - coup[:num]
             new_cart[food] = cart[food]
           else
-            binding.pry
             new_cart[food] = cart[food]
           end
         else 
