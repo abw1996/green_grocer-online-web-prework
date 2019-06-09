@@ -64,8 +64,8 @@ def apply_coupons(cart, coupons)
   end
 end
 
-def apply_clearance 
-  
+def apply_clearance(cart) 
+  binding.pry
 end
 
 def checkout(cart, coupons)
