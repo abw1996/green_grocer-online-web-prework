@@ -75,4 +75,9 @@ def checkout(cart, coupons)
   baker = consolidate_cart(cart)
   baker = apply_coupons(baker, coupons)
   baker = apply_clearance(baker)
+  total = 0.0
+  baker.each do |item, spec|
+    total += baker[item][:price] * baker[item][:count]
+  end
+  total
 end
